@@ -1,0 +1,20 @@
+site_name: 编译风暴
+site_url: https://tempestissimo.readthedocs.io/
+repo_url: https://github.com/Charley-xiao/tempestissimo
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.tabs
+    - navigation.instant
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.extra
+  - pymdownx.highlight
+  - pymdownx.superfences
+nav:
+  - 🏠 起步: index.md
+  - 硝片危机:
+      - LULESH: lulesh.md
+      - miniFE: minife.md
