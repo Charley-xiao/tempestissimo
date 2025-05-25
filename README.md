@@ -233,12 +233,7 @@
 
 ### 编译
 
-首先，登录在超算平台的账号，从 GitHub 上下载 Cloverleaf 的仓库：
-
-```
-git clone https://github.com/UK-MAC/CloverLeaf_ref
-cd CloverLeaf_ref
-```
+首先，登录在超算平台的账号，克隆本仓库，进入目录 `CloverLeaf_ref/`。
 
 然后，使用 `module load ...` 指令来用指定的编译器来编译 Cloverleaf。你可以使用 `module avail` 来查看平台上可用的编译器及相关库。
 
@@ -246,12 +241,12 @@ cd CloverLeaf_ref
 
 ### 运行
 
-复制本仓库中的 `cases/` 至 `Cloverleaf_ref/`，新建作业脚本 `job.lsf`，用指令 `bsub < job.lsf` 来提交作业。示例作业脚本如下：
+在 `Cloverleaf_ref/` 目录下，新建作业脚本 `job.lsf`，用指令 `bsub < job.lsf` 来提交作业。示例作业脚本如下：
 
 ```bash
 #!/bin/bash
 #BSUB -q ssc-cpu
-#BSUB -W 00:30
+#BSUB -W 02:00
 #BSUB -J cloverleaf
 #BSUB -o %J.out
 #BSUB -e %J.err
@@ -260,7 +255,11 @@ cd CloverLeaf_ref
 
 set -euo pipefail
 
-export OMP_NUM_THREADS=2
+lscpu
+module purge
+module load openmpi/4.1.1_oneapi # 改为你想用的 module
+
+export OMP_NUM_THREADS=2 # 可更改
 export OMP_PLACES=cores
 export OMP_PROC_BIND=close
 
