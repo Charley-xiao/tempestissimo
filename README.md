@@ -231,6 +231,26 @@ TODO：补充机器
 > `Wall clock: 0.812 s`  
 
 
+## 快速上手
+
+### 编译
+
+首先，登录在超算平台的账号，从 GitHub 上下载 Cloverleaf 的仓库：
+
+```
+git clone https://github.com/UK-MAC/CloverLeaf_ref
+cd CloverLeaf_ref
+```
+
+然后，使用 `module load ...` 指令来用指定的编译器来编译 Cloverleaf。你可以使用 `module avail` 来查看平台上可用的编译器及相关库。
+
+最后，可以选择修改 Makefile 中的各个选项，并使用 `make COMPILER=...` 来进行编译。编译成功后，会看到当前目录下有名为 `clover_leaf` 的可执行文件。
+
+### 运行
+
+复制本仓库中的 `job.lsf` 至 `Cloverleaf_ref/`，用指令 `bsub < job.lsf` 来提交作业。
+
+
 ## 攻克路径推荐
 
 ### 复现 Baseline
