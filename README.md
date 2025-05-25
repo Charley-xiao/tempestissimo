@@ -116,8 +116,7 @@ TODO：补充机器
 - 若仍无法确认代码正确性，组委会可要求进一步解释，并在不同处理器/参数下复测。**未通过正确性验证的算例，其性能得分计 0 分**。  
 
 #### 性能分数
-- 性能指标 **A<sub>CL</sub>**（单位：秒）取自 `clover.out` 最后一行 **“Wall clock”**。  
-- 每算例满分 **10 分**，总性能分为 4 个算例得分之和。  
+- 性能指标 **A<sub>CL</sub>**（单位：秒）取自 `clover.out` 最后一行 **“Wall clock”**。   
 - 设算例 *i* 的得分为 *M<sub>CL,i</sub>*，则 $M_{CL,i}=B\times\frac{A_{CL,\min}}{A_{CL,i}}$.
 - 性能总分为各编译器得到的性能分数之和，GNU 及 Intel 的 B 值为 10，而其他编译器（作为 bonus）的 B 值为 4.
 - 若 **违反规则、无法复现、篡改输出或恶意利用 Bug**，性能分数记 **0 分**。  
@@ -176,6 +175,10 @@ TODO：补充机器
 
 赛后评测会在比赛结束后进行，比赛最后的分数会在微信群中以及通过邮件公布。请在比赛结束前，将压缩包命名为 `teamname_final.tar.gz`，其中 `teamname` 为队名，并作为附件发送邮件至 [12211634@mail.sustech.edu.cn](mailto:12211634@mail.sustech.edu.cn).
 
+<div align="center">
+<img src="./assets/hikari.png">
+</div>
+
 
 ## 第二幕 · 崩落的界域
 
@@ -228,19 +231,6 @@ TODO：补充机器
 > `Wall clock: 0.812 s`  
 
 
-## 终章 · 静默律
-
-舰桥化作白沙，方格海在远方翻涌。等待下一次光临之前，澄与洛肩并肩坐在断桅上，看恒星从甲板另一侧升起，像编译器吐出的第一束晨曦。  
-
-> **澄**  
-> “也许我们救不了宇宙。”  
->
-> **洛**  
-> “那就先救一行代码。”  
-
-黑暗与光在他们掌心交握，  
-崩落的界域，被悄然缝起一道细碎银线。
-
 ## 攻克路径推荐
 
 ### 复现 Baseline
@@ -265,6 +255,21 @@ TODO：补充机器
 本赛题为南方科技大学 2025 年超算比赛基础赛道编译优化赛题。本赛题所有资源遵循 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 协议，允许非商业性使用与修改。同时，[GitHub 仓库]() 已开放讨论区，欢迎大家在此讨论与交流。如有任何问题，请提出 issue 或联系 [12211634@mail.sustech.edu.cn](mailto:12211634@mail.sustech.edu.cn). 出题人：[Charley-xiao](https://github.com/Charley-xiao).
 
 
+## 终章 · 静默律
+
+舰桥化作白沙，方格海在远方翻涌。等待下一次光临之前，澄与洛肩并肩坐在断桅上，看恒星从甲板另一侧升起，像编译器吐出的第一束晨曦。  
+
+> **澄**  
+> “也许我们救不了宇宙。”  
+>
+> **洛**  
+> “那就先救一行代码。”  
+
+黑暗与光在他们掌心交握，  
+崩落的界域，被悄然缝起一道细碎银线。
+
+
 <div align="center">
+<img src="./assets/marina.png">
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=13&height=80&section=footer&fontSize=80">
 </div>
