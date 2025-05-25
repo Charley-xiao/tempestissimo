@@ -1,5 +1,3 @@
-TODO：补充机器，重写作业脚本
-
 <div align="center">
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=13&height=250&text=%E6%98%9F%E7%A9%B9%E4%B9%8B%E5%8F%B6%EF%BC%9A%E5%A4%A9%E6%9E%A2%E7%BC%96%E8%AF%91%E7%A5%AD&fontColor=FFFFFF&fontSize=80">
 </div>
@@ -94,7 +92,7 @@ TODO：补充机器，重写作业脚本
 
 本次天枢编译祭的目标是对 CloverLeaf 进行编译优化，提升其性能。我们将提供一个 CloverLeaf 的简化版本，包含了四个算例，每个算例都包含了不同的物理模型和参数设置。你需要在给定的时间内完成所有算例的编译优化，并提交你的代码和结果。选手需要使用 GNU 以及 Intel 编译器进行编译优化，而 LLVM/AOCC 为附加 bonus。
 
-TODO：补充机器
+参赛队伍需要在 2 台 40 核心的计算节点上完成制定算力的评测，用于计分的指标是问题求解时间，即程序输出的 `clover.out` 最后 1 个 Wall clock.
 
 ### 规则
 
@@ -107,7 +105,7 @@ TODO：补充机器
 #### 测试规则
 - **运行环境**：在竞赛指定计算平台运行，规模≤ 2 个计算节点、≤ 256 核心，程序运行时间≤ 30 分钟。  
 - **参数要求**：禁止修改 `edgefactor`（固定为 16）；可调整 `SCALE` 参数，允许值：`27、28、29、64`，需按 BFS 顺序依次执行，不得并行运行多个 BFS，亦不得跳过验证。  
-- **测试算例**：共 4 个算例，输入文件位于参考代码 `Cases` 目录，不得修改 `clover.in`。  
+- **测试算例**：共 4 个算例，输入文件位于参考代码 `cases` 目录，不得修改 `clover.in`。  
 
 #### 正确性验证
 - 组委会以参考 `clover.out` 为基准验证：计算过程中 **Volume** 与 **Mass** 保持不变，最终 **Kinetic Energy** 与参考值偏差 ≤ ±0.1 %。  
@@ -248,7 +246,69 @@ cd CloverLeaf_ref
 
 ### 运行
 
-复制本仓库中的 `job.lsf` 至 `Cloverleaf_ref/`，用指令 `bsub < job.lsf` 来提交作业。
+复制本仓库中的 `cases/` 至 `Cloverleaf_ref/`，新建作业脚本 `job.lsf`，用指令 `bsub < job.lsf` 来提交作业。示例作业脚本如下：
+
+```bash
+#!/bin/bash
+#BSUB -q ssc-cpu
+#BSUB -W 00:30
+#BSUB -J cloverleaf
+#BSUB -o %J.out
+#BSUB -e %J.err
+#BSUB -n 32
+#BSUB -R "span[ptile=16]"
+
+set -euo pipefail
+
+export OMP_NUM_THREADS=2
+export OMP_PLACES=cores
+export OMP_PROC_BIND=close
+
+NP=${LSB_DJOB_NUMPROC:-32}
+
+get_ke () {
+  grep -E '^[[:space:]]*step:' "$1" | tail -1 | \
+      awk '{printf "%.10e\n", $(NF-1)}'
+}
+PASS_CNT=0
+FAIL_CNT=0
+printf "\n=== Correctness Check ===\n"
+printf "Num proc: %d\n\n" "$NP"
+
+CASES="{1..4}"
+for i in $(eval echo $CASES); do
+  printf "▶ Case %-2d : Simulating...\n" "$i"
+
+  cp "cases/case${i}/clover.in" clover.in
+  mpirun -np "$NP" ./clover_leaf
+  mv clover.out "clover${i}.out"
+
+  ref_file="cases/case${i}/clover.out"
+  my_ke=$(get_ke "clover${i}.out")
+  ref_ke=$(get_ke "$ref_file")
+
+  rel_err=$(awk -v a="$my_ke" -v b="$ref_ke" 'BEGIN{print (a-b>0? a-b: b-a)/b}')
+  rel_pct=$(awk -v e="$rel_err" 'BEGIN{printf "%.4f", e*100}')
+
+  if awk -v e="$rel_err" 'BEGIN{exit !(e<=0.001)}'; then
+    printf "   ✅ Passed  (ref=%s, out=%s, eps=%s%%)\n\n" "$ref_ke" "$my_ke" "$rel_pct"
+    ((PASS_CNT++))
+  else
+    printf "   ❌ Failed  (ref=%s, out=%s, eps=%s%%)\n\n" "$ref_ke" "$my_ke" "$rel_pct"
+    ((FAIL_CNT++))
+  fi
+done
+
+printf "=== Summary ===\n"
+printf "Passed: %d, Failed: %d\n" "$PASS_CNT" "$FAIL_CNT"
+
+if (( FAIL_CNT == 0 )); then
+  printf "🎉 All cases passed within 0.1%% tolerance.\n"
+else
+  printf "⚠️  Some cases failed. Please investigate.\n"
+  exit 1
+fi
+```
 
 
 ## 攻克路径推荐
